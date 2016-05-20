@@ -1,4 +1,4 @@
-package haimin.ye.msgConsume.common.msgQueue;
+package haimin.ye.msgConsume.common.queue;
 
 import haimin.ye.msgConsume.common.Constant;
 

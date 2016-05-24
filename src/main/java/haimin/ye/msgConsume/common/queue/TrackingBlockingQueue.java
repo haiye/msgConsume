@@ -6,7 +6,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@SuppressWarnings("hiding")
 public class TrackingBlockingQueue<Message> extends ArrayBlockingQueue<Message> {
     private static final long serialVersionUID = -3753685985464048165L;
     private int itemsTaken;
@@ -32,7 +31,7 @@ public class TrackingBlockingQueue<Message> extends ArrayBlockingQueue<Message> 
         lock.lockInterruptibly();
         try {
             final Message item = super.take();
-            if(item != Constant.END_TAG) {
+            if (item != Constant.END_TAG) {
                 this.itemsTaken++;
             }
             return item;

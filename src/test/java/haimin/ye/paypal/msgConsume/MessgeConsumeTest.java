@@ -1,16 +1,13 @@
 package haimin.ye.paypal.msgConsume;
 
 import haimin.ye.msgConsume.common.Message;
-import haimin.ye.msgConsume.common.queue.TrackingBlockingQueue;
-import haimin.ye.msgConsume.common.queue.consume.ConsumeMessageMutiThreads;
-import haimin.ye.msgConsume.common.queue.consume.StrConsumeToFile;
-import haimin.ye.msgConsume.common.queue.publish.PublishMessage;
+import haimin.ye.msgConsume.common.queue.MessageBlockingQueue;
+import haimin.ye.msgConsume.common.queue.consumer.ConsumeMessageMutiThreads;
+import haimin.ye.msgConsume.common.queue.consumer.StrToFile;
+import haimin.ye.msgConsume.common.queue.producer.PublishMessageMultiThreads;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.BlockingQueue;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class MessgeConsumeTest {
 
@@ -20,11 +17,10 @@ public class MessgeConsumeTest {
         // logger.info("yehaimin");
         // logger.warning("hm");
         //
-        PublishMessage publishMessageTest = new PublishMessage();
+        PublishMessageMultiThreads publishMessageTest = new PublishMessageMultiThreads();
 
-        BlockingQueue<Message> queueTest = new TrackingBlockingQueue<Message>(40);
-        ConsumeMessageMutiThreads aConsumeMessageMutiThreads = new ConsumeMessageMutiThreads(queueTest,
-                StrConsumeToFile.class, 15);
+        BlockingQueue<Message> queueTest = new MessageBlockingQueue<Message>(40);
+        ConsumeMessageMutiThreads aConsumeMessageMutiThreads = new ConsumeMessageMutiThreads(queueTest, StrToFile.class, 15);
         try {
             aConsumeMessageMutiThreads.consumeQueue();
         } catch (InstantiationException e) {

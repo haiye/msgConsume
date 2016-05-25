@@ -1,32 +1,28 @@
-package haimin.ye.msgConsume.common.queue.publish;
+package haimin.ye.msgConsume.common.queue.producer;
+
+import haimin.ye.msgConsume.common.Constant;
+import haimin.ye.msgConsume.common.Message;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
-import haimin.ye.msgConsume.common.Constant;
-import haimin.ye.msgConsume.common.Message;
-import haimin.ye.msgConsume.common.queue.TrackingBlockingQueue;
-import haimin.ye.msgConsume.common.queue.consume.ConsumeMessageMutiThreads;
-import haimin.ye.msgConsume.common.queue.consume.StrConsumeToFile;
-
 //public class PublishMessage implements Runnable{
-public class PublishMessage {
+public class PublishMessageMultiThreads {
 
     private static Logger logger = Logger.getLogger("MsgQueue");
 
     private int numsOfThreads;
 
-    public PublishMessage() {
+    public PublishMessageMultiThreads() {
         this.numsOfThreads = Constant.DEFAULT_NUM_THREADS_PUBLISH;
     }
 
-    public PublishMessage(int numsOfThreads) {
+    public PublishMessageMultiThreads(int numsOfThreads) {
         this.numsOfThreads = numsOfThreads;
     }
 
@@ -38,7 +34,7 @@ public class PublishMessage {
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
                 queue.put(new Message(sCurrentLine));
-                System.out.println("new line=" + sCurrentLine);
+//                System.out.println("new line=" + sCurrentLine);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

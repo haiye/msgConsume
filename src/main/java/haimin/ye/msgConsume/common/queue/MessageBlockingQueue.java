@@ -6,12 +6,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class TrackingBlockingQueue<Message> extends ArrayBlockingQueue<Message> {
+public class MessageBlockingQueue<Message> extends ArrayBlockingQueue<Message> {
     private static final long serialVersionUID = -3753685985464048165L;
     private int itemsTaken;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-    public TrackingBlockingQueue(int capacity) {
+    public MessageBlockingQueue(int capacity) {
         super(capacity);
     }
 

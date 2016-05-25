@@ -1,6 +1,5 @@
-package haimin.ye.msgConsume.common.queue.consume;
+package haimin.ye.msgConsume.common.queue.consumer;
 
-import haimin.ye.msgConsume.common.Constant;
 import haimin.ye.msgConsume.common.Message;
 
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -29,16 +28,18 @@ public class ConsumeMessageMutiThreads {
     @SuppressWarnings("unchecked")
     public void consumeQueue() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {
+        
         List<Thread> threads = new ArrayList<Thread>();
         for (int i = 0; i < numThreads; ++i) {
             Runnable c = null;
-            if (consumeClient.equals(StrConsumeToFile.class)) {
+            if (consumeClient.equals(StrToFile.class)) {
                 // c = new StrConsumeToFile(messageQueue );
                 c = (Runnable) consumeClient.getConstructor(BlockingQueue.class).newInstance(messageQueue);
 
             }
             Thread t = new Thread(null, c, consumeClient.getSimpleName() + "-" + i + "-Thread");
-
+            System.out.println("new thread="+t.toString());
+            
             Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
                 public void uncaughtException(Thread t, Throwable e) {
                     logger.info("Client Error in " + t.getName() + "; " + e);

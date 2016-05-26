@@ -43,6 +43,13 @@ public class MessageProducerMultyThreads {
         this.numThreads = Constant.DEFAULT_NUM_THREADS_PRODUCER;
     }
 
+    /**
+     * 
+     * put message into messageQueue
+     * 
+     * start many threads and only numThreads of producer would running, others are waiting
+     * in this case, threads number is same as number of lines in driverFile
+     * */
     @SuppressWarnings("unchecked")
     public void produceQueue() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {

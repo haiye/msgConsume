@@ -25,6 +25,13 @@ public class MessageConsumerMultyThreads {
         this.numThreads = numThreads;
     }
 
+    /**
+     * 
+     * consume message from messageQueue
+     * 
+     * start numThreads of threads, and keep all of them active and take message from queue one by one
+     * NOTE: only numThreads of threads would be started
+     * */
     @SuppressWarnings("unchecked")
     public void consumeQueue() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {

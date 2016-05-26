@@ -1,4 +1,4 @@
-package haimin.ye.msgConsume.common;
+package haimin.ye.msgConsume.common.queue.message;
 
 public class Message {
 

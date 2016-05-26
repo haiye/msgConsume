@@ -1,7 +1,7 @@
 package haimin.ye.msgConsume.common.queue.producer;
 
 import haimin.ye.msgConsume.common.Constant;
-import haimin.ye.msgConsume.common.Message;
+import haimin.ye.msgConsume.common.queue.message.Message;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,7 +19,7 @@ public class PublishMessageMultiThreads {
     private int numsOfThreads;
 
     public PublishMessageMultiThreads() {
-        this.numsOfThreads = Constant.DEFAULT_NUM_THREADS_PUBLISH;
+        this.numsOfThreads = Constant.DEFAULT_NUM_THREADS_PRODUCER;
     }
 
     public PublishMessageMultiThreads(int numsOfThreads) {

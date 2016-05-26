@@ -1,6 +1,6 @@
 package haimin.ye.msgConsume.common.queue.consumer;
 
-import haimin.ye.msgConsume.common.Message;
+import haimin.ye.msgConsume.common.queue.message.Message;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;

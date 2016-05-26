@@ -1,6 +1,7 @@
 package haimin.ye.msgConsume.common.queue.producer;
 
-import haimin.ye.msgConsume.common.Message;
+import haimin.ye.msgConsume.common.queue.message.Message;
+
 import java.util.concurrent.BlockingQueue;
 
 public interface ProduceMessageInterface extends Runnable {

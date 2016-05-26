@@ -1,9 +1,9 @@
 package haimin.ye.paypal.msgConsume;
 
-import haimin.ye.msgConsume.common.Message;
 import haimin.ye.msgConsume.common.queue.MessageBlockingQueue;
 import haimin.ye.msgConsume.common.queue.consumer.ConsumeMessageMutiThreads;
-import haimin.ye.msgConsume.common.queue.consumer.StrToFile;
+import haimin.ye.msgConsume.common.queue.consumer.ConsumeStringMessage;
+import haimin.ye.msgConsume.common.queue.message.Message;
 import haimin.ye.msgConsume.common.queue.producer.PublishMessageMultiThreads;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +20,7 @@ public class MessgeConsumeTest {
         PublishMessageMultiThreads publishMessageTest = new PublishMessageMultiThreads();
 
         BlockingQueue<Message> queueTest = new MessageBlockingQueue<Message>(40);
-        ConsumeMessageMutiThreads aConsumeMessageMutiThreads = new ConsumeMessageMutiThreads(queueTest, StrToFile.class, 15);
+        ConsumeMessageMutiThreads aConsumeMessageMutiThreads = new ConsumeMessageMutiThreads(queueTest, ConsumeStringMessage.class, 15);
         try {
             aConsumeMessageMutiThreads.consumeQueue();
         } catch (InstantiationException e) {

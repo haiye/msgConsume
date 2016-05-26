@@ -49,6 +49,8 @@ public class MessageProducerMultyThreads {
      * 
      * start many threads and only numThreads of producer would running, others are waiting
      * in this case, threads number is same as number of lines in driverFile
+     * 
+     * Bad: too many threads are started which cause lots of CPU and memory resources
      * */
     @SuppressWarnings("unchecked")
     public void produceQueue() throws InstantiationException, IllegalAccessException, IllegalArgumentException,

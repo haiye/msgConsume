@@ -19,6 +19,7 @@ public class StringMessageProducer implements MessageProducer {
     }
 
     public StringMessageProducer(BlockingQueue<Message> messageQueue, Message message, int tag) {
+        System.out.println("producer thread: " + Thread.currentThread().getName() + "_" + tag+" is ready");
         this.messageQueue = messageQueue;
         this.message = message;
         this.tag = tag;

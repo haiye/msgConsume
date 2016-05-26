@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MessageBlockingQueue<Message> extends ArrayBlockingQueue<Message> {
+
     private static final long serialVersionUID = -3753685985464048165L;
     private int itemsTaken;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();

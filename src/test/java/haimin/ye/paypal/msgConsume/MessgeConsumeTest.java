@@ -1,9 +1,9 @@
 package haimin.ye.paypal.msgConsume;
 
 import haimin.ye.msgConsume.common.queue.MessageBlockingQueue;
-import haimin.ye.msgConsume.common.queue.consumer.ConsumeMessageMutiThreads;
-import haimin.ye.msgConsume.common.queue.consumer.ConsumeStringMessage;
-import haimin.ye.msgConsume.common.queue.message.MessageInterface;
+import haimin.ye.msgConsume.common.queue.consumer.MessageConsumerMultyThreads;
+import haimin.ye.msgConsume.common.queue.consumer.StringMessageConsumer;
+import haimin.ye.msgConsume.common.queue.message.Message;
 import haimin.ye.msgConsume.common.queue.producer.PublishMessageMultiThreads;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,8 +19,9 @@ public class MessgeConsumeTest {
         //
         PublishMessageMultiThreads publishMessageTest = new PublishMessageMultiThreads();
 
-        BlockingQueue<MessageInterface> queueTest = new MessageBlockingQueue<MessageInterface>(40);
-        ConsumeMessageMutiThreads aConsumeMessageMutiThreads = new ConsumeMessageMutiThreads(queueTest, ConsumeStringMessage.class, 15);
+        BlockingQueue<Message> queueTest = new MessageBlockingQueue<Message>(40);
+        MessageConsumerMultyThreads aConsumeMessageMutiThreads = new MessageConsumerMultyThreads(queueTest,
+                StringMessageConsumer.class, 15);
         try {
             aConsumeMessageMutiThreads.consumeQueue();
         } catch (InstantiationException e) {

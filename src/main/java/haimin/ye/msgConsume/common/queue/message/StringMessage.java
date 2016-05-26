@@ -1,11 +1,8 @@
 package haimin.ye.msgConsume.common.queue.message;
 
-import haimin.ye.msgConsume.common.queue.message.MessageInterface;
+import haimin.ye.msgConsume.common.queue.message.Message;
 
-
-
-
-public class StringMessage implements MessageInterface{
+public class StringMessage implements Message {
 
     private String fileName;
     private String message;
@@ -14,7 +11,7 @@ public class StringMessage implements MessageInterface{
         this.message = message;
         this.fileName = fileName;
     }
-    
+
     public StringMessage(String message) {
         this.fileName = null;
         this.message = message;

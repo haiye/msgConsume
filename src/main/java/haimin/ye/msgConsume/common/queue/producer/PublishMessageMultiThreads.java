@@ -1,7 +1,7 @@
 package haimin.ye.msgConsume.common.queue.producer;
 
 import haimin.ye.msgConsume.common.Constant;
-import haimin.ye.msgConsume.common.queue.message.MessageInterface;
+import haimin.ye.msgConsume.common.queue.message.Message;
 import haimin.ye.msgConsume.common.queue.message.StringMessage;
 
 import java.io.BufferedReader;
@@ -27,7 +27,7 @@ public class PublishMessageMultiThreads {
         this.numsOfThreads = numsOfThreads;
     }
 
-    public void publishFromFile(BlockingQueue<MessageInterface> queue, String filePath) {
+    public void publishFromFile(BlockingQueue<Message> queue, String filePath) {
         System.out.println("numsOfThreads = " + numsOfThreads);
         BufferedReader br = null;
         try {
@@ -59,7 +59,7 @@ public class PublishMessageMultiThreads {
 
     }
 
-    public void publish(BlockingQueue<MessageInterface> queue, MessageInterface msg) {
+    public void publish(BlockingQueue<Message> queue, Message msg) {
         try {
             queue.put(msg);
             logger.info("begin to publish message into queue");

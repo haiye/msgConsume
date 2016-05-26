@@ -1,7 +1,7 @@
 package haimin.ye.msgConsume.common.queue.producer;
 
 import haimin.ye.msgConsume.common.Constant;
-import haimin.ye.msgConsume.common.queue.message.MessageInterface;
+import haimin.ye.msgConsume.common.queue.message.Message;
 import haimin.ye.msgConsume.common.queue.message.StringMessage;
 
 import java.io.BufferedReader;
@@ -13,32 +13,33 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
-public class ProduceMessageMultiThreads {
+//import java.util.logging.Logger;
 
-    private static Logger logger = Logger.getLogger("MsgQueue");
+public class MessageProducerMultyThreads {
 
-    private BlockingQueue<MessageInterface> messageQueue;
+    // private static Logger logger = Logger.getLogger("MsgQueue");
+
+    private BlockingQueue<Message> messageQueue;
     @SuppressWarnings("rawtypes")
-    private Class consumeClient;
+    private Class producerClient;
     private int numThreads;
     private String driverFile;
 
     @SuppressWarnings("rawtypes")
-    public ProduceMessageMultiThreads(String driverFile, BlockingQueue<MessageInterface> messageQueue, Class consumeClient,
+    public MessageProducerMultyThreads(String driverFile, BlockingQueue<Message> messageQueue, Class consumeClient,
             int numThreads) {
         this.driverFile = driverFile;
         this.messageQueue = messageQueue;
-        this.consumeClient = consumeClient;
+        this.producerClient = consumeClient;
         this.numThreads = numThreads;
     }
 
     @SuppressWarnings("rawtypes")
-    public ProduceMessageMultiThreads(String driverFile, BlockingQueue<MessageInterface> messageQueue, Class consumeClient) {
+    public MessageProducerMultyThreads(String driverFile, BlockingQueue<Message> messageQueue, Class consumeClient) {
         this.driverFile = driverFile;
         this.messageQueue = messageQueue;
-        this.consumeClient = consumeClient;
+        this.producerClient = consumeClient;
         this.numThreads = Constant.DEFAULT_NUM_THREADS_PRODUCER;
     }
 
@@ -58,9 +59,9 @@ public class ProduceMessageMultiThreads {
             while ((sCurrentLine = br.readLine()) != null) {
 
                 Runnable c = null;
-                MessageInterface message = new StringMessage("file_name" + (count++), sCurrentLine);
-                if (consumeClient.equals(ProduceStringMessage.class)) {
-                    c = (Runnable) consumeClient.getConstructor(BlockingQueue.class, MessageInterface.class, int.class)
+                Message message = new StringMessage("file_name" + (count++), sCurrentLine);
+                if (producerClient.equals(StringMessageProducer.class)) {
+                    c = (Runnable) producerClient.getConstructor(BlockingQueue.class, Message.class, int.class)
                             .newInstance(messageQueue, message, thread_num);
                 }
                 System.out.println("new producer thread=" + (thread_num++));

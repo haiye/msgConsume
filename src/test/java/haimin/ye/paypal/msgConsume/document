@@ -1,1 +1,8 @@
 http://blog.csdn.net/wangwenhui11/article/details/6760474
+
+http://blog.chinaunix.net/uid-20577907-id-3519578.html
+            while (getQueueSize(tpe.getQueue()) >= queueDeep) &&maximumPoolSize<maximumPoolSize_value{
+                Thread.sleep(3000)
+                add new thread into queue
+                
+            }

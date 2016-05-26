@@ -1,6 +1,6 @@
 package haimin.ye.msgConsume.common.queue.consumer;
 
-import haimin.ye.msgConsume.common.queue.message.Message;
+import haimin.ye.msgConsume.common.queue.message.MessageInterface;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -13,13 +13,13 @@ public class ConsumeMessageMutiThreads {
 
     private static Logger logger = Logger.getLogger("ConsumeMessage");
 
-    private BlockingQueue<Message> messageQueue;
+    private BlockingQueue<MessageInterface> messageQueue;
     @SuppressWarnings("rawtypes")
     private Class consumeClient;
     private int numThreads;
 
     @SuppressWarnings("rawtypes")
-    public ConsumeMessageMutiThreads(BlockingQueue<Message> messageQueue, Class consumeClient, int numThreads) {
+    public ConsumeMessageMutiThreads(BlockingQueue<MessageInterface> messageQueue, Class consumeClient, int numThreads) {
         this.messageQueue = messageQueue;
         this.consumeClient = consumeClient;
         this.numThreads = numThreads;

@@ -3,7 +3,7 @@ package haimin.ye.paypal.msgConsume;
 import haimin.ye.msgConsume.common.queue.MessageBlockingQueue;
 import haimin.ye.msgConsume.common.queue.consumer.ConsumeMessageMutiThreads;
 import haimin.ye.msgConsume.common.queue.consumer.ConsumeStringMessage;
-import haimin.ye.msgConsume.common.queue.message.Message;
+import haimin.ye.msgConsume.common.queue.message.MessageInterface;
 import haimin.ye.msgConsume.common.queue.producer.ProduceMessageMultiThreads;
 import haimin.ye.msgConsume.common.queue.producer.ProduceStringMessage;
 
@@ -14,7 +14,7 @@ public class MessgeConsumeTest2 {
     public static void main(String args[]) {
 
 
-        BlockingQueue<Message> queueTest = new MessageBlockingQueue<Message>(40);
+        BlockingQueue<MessageInterface> queueTest = new MessageBlockingQueue<MessageInterface>(40);
         
         ConsumeMessageMutiThreads aConsumeMessageMutiThreads = new ConsumeMessageMutiThreads(queueTest, ConsumeStringMessage.class, 20);
         try {

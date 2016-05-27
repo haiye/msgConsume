@@ -9,6 +9,10 @@ public class Constant {
 
     public static final int DEFAULT_NUM_THREADS_PRODUCER = 10;
 
+    public static final int DEFAULT_NUM_THREADS_PRODUCER_COREPOOLSIZE = 10;
+    public static final int DEFAULT_NUM_THREADS_PRODUCER_MAXPOOLSIZE = 20;
+    public static final int DEFAULT_NUM_THREADS_PRODUCER_BlOCKINGQUEUESIZE = 10;
+
     public static final int DEFAULT_NUM_THREADS_CONSUME = 10;
 
     public static final int DEFAULT_QUEUE_SIZE = 100;

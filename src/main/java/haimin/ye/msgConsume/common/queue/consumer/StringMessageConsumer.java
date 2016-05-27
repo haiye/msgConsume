@@ -4,20 +4,24 @@ import haimin.ye.msgConsume.common.Constant;
 import haimin.ye.msgConsume.common.queue.message.Message;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 public class StringMessageConsumer implements MessageConsumer {
-
-    private static Logger logger = Logger.getLogger("ConsumeMessage");
+    Logger logger = Logger.getLogger(StringMessageConsumer.class);
 
     private BlockingQueue<Message> messageQueue;
 
     public StringMessageConsumer(BlockingQueue<Message> messageQueue) {
+        logger.trace(Thread.currentThread().getName() + " is init...");
         this.messageQueue = messageQueue;
     }
 
     public void run() {
+        logger.trace(Thread.currentThread().getName() + " is running...");
         dequeue(messageQueue);
+        logger.trace(Thread.currentThread().getName() + " is releasing...");
+
     }
 
     /**
@@ -29,23 +33,23 @@ public class StringMessageConsumer implements MessageConsumer {
         Message message = null;
         try {
             while ((message = messageQueue.take()) != Constant.END_TAG) {
-                System.out.println("consumer thread: " + Thread.currentThread().getName()
-                        + "; deqeue: begin; messageQueue.size: " + messageQueue.size());
-
+                logger.trace(Thread.currentThread().getName() + " deqeue begin; messageQueue.size: "
+                        + messageQueue.size());
                 String message_str = message.getMessage();
                 /*
-                 * add logic to deal with message_str
+                 * add logic to deal with message_str like write string to files
                  */
                 Thread.sleep(100);
+                logger.debug("message content to be dequeued: "+message);
 
-                System.out.println("consumer thread: " + Thread.currentThread().getName()
-                        + "; deqeue: end; messageQueue.size: " + messageQueue.size() + "; message_str:" + message_str);
+                logger.trace(Thread.currentThread().getName() + " deqeue end; messageQueue.size: "
+                        + messageQueue.size() + "; message_str:" + message_str);
             }
             messageQueue.put(Constant.END_TAG);
-             logger.info(Thread.currentThread().getName()+"thread is released");
 
         } catch (Exception e) {
-            logger.info(e + "");
+            logger.error("error happened while dequeue; current thread: " + Thread.currentThread().getName()
+                    + "; exception: " + e);
             e.printStackTrace();
         }
     }

@@ -17,12 +17,17 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.log4j.Logger;
 
 //import java.util.logging.Logger;
 
 public class MessageProducerMultyThreads {
 
-    // private static Logger logger = Logger.getLogger("MsgQueue");
+    Logger logger = Logger.getLogger(MessageProducerMultyThreads.class);
 
     private BlockingQueue<Message> messageQueue;
     @SuppressWarnings("rawtypes")
@@ -61,6 +66,7 @@ public class MessageProducerMultyThreads {
     @SuppressWarnings("unchecked")
     public void produceQueue() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {
+        logger.trace(Thread.currentThread().getName() + " produceQueue is beginning...");
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
@@ -73,16 +79,17 @@ public class MessageProducerMultyThreads {
             br = getDriverReader(driverFile);
             while ((sCurrentLine = br.readLine()) != null) {
 
-                Runnable c = null;
+                Runnable runnableInstance = null;
                 Message message = new StringMessage("file_name" + (count++), sCurrentLine);
                 if (producerClient.equals(StringMessageProducer.class)) {
-                    c = (Runnable) producerClient.getConstructor(BlockingQueue.class, Message.class, int.class)
-                            .newInstance(messageQueue, message, thread_num);
+                    runnableInstance = (Runnable) producerClient.getConstructor(BlockingQueue.class, Message.class).newInstance(
+                            messageQueue, message);
+                    
                 }
-                System.out.println("new producer thread=" + (thread_num++));
+                String threadName = producerClient.getSimpleName() + "_thread_" + (thread_num++);
 
-                executor.execute(c);
-
+                Thread aThread = new Thread(null, runnableInstance, threadName);
+                executor.execute(aThread);
             }
             executor.shutdown();
 
@@ -99,41 +106,44 @@ public class MessageProducerMultyThreads {
 
         }
 
-        int i = 0;
         while (!executor.isTerminated()) {
-
-            System.out.println("waiting all threads released" + (i++));
+            logger.trace(Thread.currentThread().getName() + "waiting all producer threads released...");
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("All threads are released");
+        logger.trace("All threads are released");
 
-        System.out.println("add end_tag into queue2");
         try {
             messageQueue.put(Constant.END_TAG);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        logger.trace(Thread.currentThread().getName() + " produceQueue is ending...");
+
     }
-    
-    
+
     /**
      * 
      * put message into messageQueue
      * 
      * 
-     * numThreads of producer would running at most, and start a new thread to produce message once previous thread is finished
+     * numThreads of producer would running at most, and start a new thread to
+     * produce message once previous thread is finished
      * 
-     * Good: only numThreads of producer started at the same time, which cause less resources
+     * Good: only numThreads of producer started at the same time, which cause
+     * less resources
      * */
 
     @SuppressWarnings("unchecked")
     public void produceQueue2() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, NoSuchMethodException, SecurityException {
+        logger.debug(Thread.currentThread().getName() + " produceQueue is beginning...");
+
         List<Thread> threads = new ArrayList<Thread>();
         int thread_num = 1;
         BufferedReader br = null;
@@ -144,78 +154,144 @@ public class MessageProducerMultyThreads {
         try {
             br = getDriverReader(this.driverFile);
 
-            System.out.println("target_thread_num" + numThreads + "; threads.size0()=" + threads.size());
             while (((sCurrentLine = br.readLine()) != null) && threads.size() <= numThreads) {
 
                 // waiting thread release if we already enough threads
-                int time_to_wait_release = 0;
                 while (threads.size() == numThreads) {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
-                    System.out.println("target_thread_num" + numThreads + "; threads.size1()=" + threads.size()
-                            + ";time_to_wait_release =" + time_to_wait_release);
 
                     for (int i = 0; i < threads.size(); i++) {
                         Thread thread = threads.get(i);
-                        System.out.println("thread.name" + thread.getName() + "; thread status=" + thread.getState());
-
                         if (thread.getState() == State.TERMINATED) {
-                            System.out.println("target_thread_num" + numThreads + "; threads.size2()=" + threads.size()
-                                    + ";time_to_wait_release =" + time_to_wait_release);
-
                             threads.remove(thread);
-                            System.out.println("target_thread_num" + numThreads + "; threads.size3()=" + threads.size()
-                                    + ";time_to_wait_release =" + time_to_wait_release);
 
                         }
                     }
-                    System.out.println("target_thread_num" + numThreads + "; threads.size4()=" + threads.size()
-                            + ";time_to_wait_release =" + time_to_wait_release);
-                    time_to_wait_release++;
+
                 }
 
                 Message message = new StringMessage("file_name" + (count++), sCurrentLine);
 
-                Runnable c = null;
+                Runnable runnableInstance = null;
                 if (producerClient.equals(StringMessageProducer.class)) {
-                    c = (Runnable) producerClient.getConstructor(BlockingQueue.class, Message.class, int.class)
-                            .newInstance(messageQueue, message, (thread_num++));
+                    runnableInstance = (Runnable) producerClient.getConstructor(BlockingQueue.class, Message.class).newInstance(
+                            messageQueue, message);
                 }
 
-                Thread t = new Thread(null, c, producerClient.getSimpleName() + "-" + thread_num + "-Thread");
-                t.getState();
+                String threadName = producerClient.getSimpleName() + "_thread_" + (thread_num++);
+
+                Thread aThread = new Thread(null, runnableInstance, threadName);
+                aThread.getState();
                 Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
                     public void uncaughtException(Thread t, Throwable e) {
-                        System.out.println("Client Error in " + t.getName() + "; " + e);
+                        logger.error("Client Error in " + t.getName() + "; " + e);
                         t.interrupt();
                     }
                 });
-                threads.add(t);
-                t.start();
-            }
-
-            try {
-                messageQueue.put(Constant.END_TAG);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                threads.add(aThread);
+                aThread.start();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
 
         }
+        try {
+            messageQueue.put(Constant.END_TAG);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        logger.debug(Thread.currentThread().getName() + " produceQueue is ending...");
 
     }
 
-    
-    public void produceQueue3(){
-        
+    /**
+     * 
+     * put message into messageQueue
+     * 
+     * 
+     * numThreads of producer would running at most
+     * compare to produceQueue2(), it's easier to maintains
+     * 
+     * Good: only numThreads of producer started at the same time, which cause less resources
+     * 
+     * NOTE
+     * ThreadPoolExecutor.CallerRunsPolicy():
+     * while blockingQueue.size and maximumPoolSize are full, re-send thread into thread pool
+     * 
+     * ThreadPoolExecutor.DiscardOldestPolicy()
+     * while blockingQueue.size and maximumPoolSize are full, discard oldest thread and run threadPool.execute() again to add new thread
+     * 
+     * ThreadPoolExecutor.DiscardPolicy()
+     * while blockingQueue.size and maximumPoolSize are full, discard all new threads who are trying to add into blocking queue
+     * */
+
+    @SuppressWarnings("unchecked")
+    public void produceQueue3() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException, NoSuchMethodException, SecurityException {
+        logger.debug(Thread.currentThread().getName() + " produceQueue is beginning...");
+
+        BlockingQueue<Runnable> producerBlockingQueue = new LinkedBlockingQueue<Runnable>(
+                Constant.DEFAULT_NUM_THREADS_PRODUCER_BlOCKINGQUEUESIZE);
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(numThreads, numThreads * 2, 100, TimeUnit.MILLISECONDS,
+                producerBlockingQueue, new ThreadPoolExecutor.CallerRunsPolicy());
+
+        List<Thread> threads = new ArrayList<Thread>();
+        int thread_num = 1;
+        BufferedReader br = null;
+
+        String sCurrentLine;
+        int count = 1;
+
+        try {
+            br = getDriverReader(this.driverFile);
+
+            while (((sCurrentLine = br.readLine()) != null) && threads.size() <= numThreads) {
+
+                Message message = new StringMessage("file_name" + (count++), sCurrentLine);
+
+                Runnable runnableInstance = null;
+                if (producerClient.equals(StringMessageProducer.class)) {
+                    runnableInstance = (Runnable) producerClient.getConstructor(BlockingQueue.class, Message.class).newInstance(
+                            messageQueue, message);
+                }
+                String threadName = producerClient.getSimpleName() + "_thread_" + (thread_num++);
+
+                Thread aThread = new Thread(null, runnableInstance, threadName);
+                threadPool.execute(aThread);
+
+            }
+
+            threadPool.shutdown();
+
+            while (!threadPool.isTerminated()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                logger.trace(Thread.currentThread().getName() + "waiting all producer threads released...");
+            }
+            logger.trace("All threads are released");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
+        try {
+            messageQueue.put(Constant.END_TAG);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        logger.trace(Thread.currentThread().getName() + " produceQueue is ending...");
+
     }
-    
-    
+
     private BufferedReader getDriverReader(String driverFile) throws FileNotFoundException {
         BufferedReader br;
         StringBuilder sbfp = getFilePath(driverFile);

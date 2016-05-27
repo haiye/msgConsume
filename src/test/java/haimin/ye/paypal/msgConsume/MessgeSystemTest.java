@@ -9,7 +9,7 @@ import haimin.ye.msgConsume.common.queue.producer.StringMessageProducer;
 
 import java.util.concurrent.BlockingQueue;
 
-public class MessgeConsumeTest2 {
+public class MessgeSystemTest {
 
     public static void main(String args[]) {
 
@@ -18,9 +18,8 @@ public class MessgeConsumeTest2 {
         MessageConsumerMultyThreads aConsumeMessageMutiThreads = new MessageConsumerMultyThreads(queueTest,
                 StringMessageConsumer.class, 20);
         try {
-            aConsumeMessageMutiThreads.consumeQueue();
+            aConsumeMessageMutiThreads.consumeMessageQueue();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -28,9 +27,11 @@ public class MessgeConsumeTest2 {
                 "src/test/java/haimin/ye/paypal/msgConsume/input_publish.txt", queueTest, StringMessageProducer.class,
                 8);
         try {
-            produceMessageMultiThreads.produceQueue2();
+//            produceMessageMultiThreads.produceQueue();
+//            produceMessageMultiThreads.produceQueue2();
+            produceMessageMultiThreads.produceQueue3();
+
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

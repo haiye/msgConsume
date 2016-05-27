@@ -1,7 +1,5 @@
 package haimin.ye.msgConsume.common.queue.message;
 
-import haimin.ye.msgConsume.common.queue.message.Message;
-
 public class StringMessage implements Message {
 
     private String fileName;

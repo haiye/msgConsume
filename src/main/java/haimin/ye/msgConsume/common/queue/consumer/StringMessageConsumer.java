@@ -42,7 +42,7 @@ public class StringMessageConsumer implements MessageConsumer {
                         + "; deqeue: end; messageQueue.size: " + messageQueue.size() + "; message_str:" + message_str);
             }
             messageQueue.put(Constant.END_TAG);
-            // logger.info("Consumer Thread is released");
+             logger.info(Thread.currentThread().getName()+"thread is released");
 
         } catch (Exception e) {
             logger.info(e + "");

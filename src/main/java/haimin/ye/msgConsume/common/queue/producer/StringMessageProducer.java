@@ -40,6 +40,7 @@ public class StringMessageProducer implements MessageProducer {
             System.out.println("producer thread: " + Thread.currentThread().getName() + "_" + tag
                     + "; enqueue: begin; message: " + message + "; messageQueue.size: " + messageQueue.size());
             messageQueue.put(message);
+            Thread.sleep(500);
             System.out.println("producer thread: " + Thread.currentThread().getName() + "_" + tag
                     + "; enqueue: end; message: " + message + "; messageQueue.size: " + messageQueue.size());
 

@@ -28,7 +28,7 @@ public class MessgeConsumeTest2 {
                 "src/test/java/haimin/ye/paypal/msgConsume/input_publish.txt", queueTest, StringMessageProducer.class,
                 8);
         try {
-            produceMessageMultiThreads.produceQueue();
+            produceMessageMultiThreads.produceQueue2();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

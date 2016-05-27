@@ -54,7 +54,9 @@ public class MessageConsumerMultyThreads {
             });
             threads.add(t);
             t.start();
+            System.out.println("debug: threads size="+threads.size());
         }
+        System.out.println("debug2: threads size="+threads.size());
 
     }
 
